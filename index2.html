@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Саған арналған ерекше сыйлық 🌸</title>
+    <style>
+        :root {
+            --env-color: #ffadad;
+            --env-inner: #ff85a1;
+            --paper-color: #fffafb;
+            --accent: #d81b60;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe3ec 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Гүл күлтелерінің анимациясы */
+        .petal {
+            position: absolute;
+            background-color: #ffb7c5;
+            border-radius: 150% 0 150% 0;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* Конверт контейнері */
+        .container {
+            position: relative;
+            z-index: 10;
+            perspective: 1000px;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: var(--env-color);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper:hover { transform: scale(1.02); }
+
+        /* Конверт қақпағы */
+        .envelope-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 5;
+            border-top: 130px solid var(--env-inner);
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
+
+        /* Хаттың стилі */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 300px;
+            height: 190px;
+            background: var(--paper-color);
+            z-index: 3;
+            transition: 0.8s;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        .letter img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffcad4;
+            margin-bottom: 10px;
+        }
+
+        .letter h2 { color: var(--accent); margin: 5px 0; font-size: 1.2rem; }
+        .letter p { color: #444; font-size: 0.9rem; line-height: 1.4; min-height: 60px; }
+
+        /* Беттерді ауыстыру батырмасы */
+        .next-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        /* Ашылғандағы күй */
+        .open::before { transform: rotateX(180deg); z-index: 1; }
+        .open .letter { 
+            transform: translateY(-150px); 
+            height: 300px; 
+            z-index: 6; 
+        }
+
+        /* Музыка батырмасы (көрінбейтін немесе кішкентай) */
+        #music-status {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<div id="music-status">Күй: Хатты ашыңыз 🎵</div>
+
+<div class="container">
+    <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+        <div class="letter" id="letter-content">
+            <div id="page1">
+                <img src="https://cdn-icons-png.flaticon.com/512/2913/2913520.png" alt="Flower">
+                <h2>Қымбатты жан! ✨</h2>
+                <p>Бүгінгі мерекеңізбен! Сіздің жүрегіңіз әрқашан мейірім мен шуаққа толы болсын.</p>
+                <button class="next-btn" onclick="nextPage(2, event)">Келесі бет →</button>
+            </div>
+            <div id="page2" style="display:none;">
+                <img src="https://cdn-icons-png.flaticon.com/512/3209/3209931.png" alt="Sun">
+                <h2>Көктемгі тілек 🌷</h2>
+                <p>Күн нұрындай жарқырап, гүлдей құлпырып жүре беріңіз. Әр күніңіз қуанышқа толсын!</p>
+                <button class="next-btn" onclick="nextPage(3, event)">Тағы да →</button>
+            </div>
+            <div id="page3" style="display:none;">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Heart">
+                <h2>Ең игі лебіз ❤️</h2>
+                <p>Сіз — әлемдегі ең сұлу әрі ерекше жансыз. Мерекеңізбен құттықтаймын!</p>
+                <p style="font-size: 0.7rem; color: #aaa;">(Соңы. Қайта жабу үшін басыңыз)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let musicStarted = false;
+
+    // Конвертті ашу
+    function openEnvelope() {
+        const env = document.getElementById('envelope');
+        env.classList.toggle('open');
+        
+        // Музыканы қосу (тек бірінші рет ашқанда)
+        if (!musicStarted) {
+            const music = document.getElementById('bgMusic');
+            music.play().catch(e => console.log("Браузер музыкаға рұқсат бермеді"));
+            document.getElementById('music-status').innerText = "Музыка ойнап тұр 🎶";
+            musicStarted = true;
+        }
+    }
+
+    // Беттерді ауыстыру
+    function nextPage(page, event) {
+        event.stopPropagation(); // Конверттің жабылып қалуын болдырмау
+        document.getElementById('page1').style.display = 'none';
+        document.getElementById('page2').style.display = 'none';
+        document.getElementById('page3').style.display = 'none';
+        
+        document.getElementById('page' + page).style.display = 'block';
+    }
+
+    // Күлтелерді жаудыру
+    function createPetal() {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.width = Math.random() * 15 + 10 + 'px';
+        petal.style.height = Math.random() * 15 + 10 + 'px';
+        petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+        petal.style.backgroundColor = `hsl(${Math.random() * 30 + 330}, 100%, 85%)`;
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 6000);
+    }
+    setInterval(createPetal, 200);
+</script>
+
+</body>
+</html>
